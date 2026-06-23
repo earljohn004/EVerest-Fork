@@ -9,6 +9,9 @@ active_modules:
       error_history:
         - module_id: error_history
           implementation_id: error_history
+      ocpp:
+        - module_id: ocpp
+          implementation_id: ocpp_generic
     module: API
   ev_api:
     connections:
@@ -35,8 +38,11 @@ active_modules:
         - implementation_id: main
           module_id: token_provider
       token_validator:
-        - implementation_id: main
-          module_id: token_validator
+        - implementation_id: auth_validator
+          module_id: ocpp
+      kvs:
+        - module_id: persistent_store
+          implementation_id: main
     module: Auth
   ev_manager:
     config_module:
@@ -111,6 +117,23 @@ active_modules:
     telemetry:
       id: 1
   grid_connection_point:
+    module: EnergyNode
+    mapping:
+      module:
+        evse: 0
+    config_module:
+      fuse_limit_A: 40
+      phase_count: 3
+    connections:
+      energy_consumer:
+        - implementation_id: energy_grid
+          module_id: connector_1_ocpp_sink
+    module: EnergyNode
+  connector_1_ocpp_sink:
+    module: EnergyNode
+    mapping:
+      module:
+        evse: 1
     config_module:
       fuse_limit_A: 40
       phase_count: 3
@@ -118,7 +141,6 @@ active_modules:
       energy_consumer:
         - implementation_id: energy_grid
           module_id: connector_1
-    module: EnergyNode
   iso15118_car:
     config_module:
       device: auto
@@ -158,6 +180,44 @@ active_modules:
     module: Setup
   slac:
     module: SlacSimulator
+  ocpp:
+    module: OCPP
+    config_module:
+      ChargePointConfigPath: /workspace/config/ocpp-powerfill.json
+    connections:
+      evse_manager:
+        - module_id: connector_1
+          implementation_id: evse
+      reservation:
+        - module_id: auth
+          implementation_id: reservation
+      auth:
+        - module_id: auth
+          implementation_id: main
+      system:
+        - module_id: system
+          implementation_id: main
+      security:
+        - module_id: evse_security
+          implementation_id: main
+      display_message:
+        - module_id: display_message
+          implementation_id: display_message
+      evse_energy_sink:
+        - module_id: grid_connection_point
+          implementation_id: external_limits
+        - module_id: connector_1_ocpp_sink
+          implementation_id: external_limits
+  system:
+    module: System
+  display_message:
+    module: TerminalDisplayMessage
+  session_cost:
+    module: TerminalCostAndPriceMessage
+    connections:
+      session_cost:
+        - module_id: ocpp
+          implementation_id: session_cost
   token_provider:
     config_implementation:
       main:

@@ -158,7 +158,7 @@ active_modules:
   ocpp:
     module: OCPP
     config_module:
-      ChargePointConfigPath: config-docker.json
+      ChargePointConfigPath: /workspace/config/ocpp-powerfill.json
     connections:
       evse_manager:
         - module_id: evse_manager_1

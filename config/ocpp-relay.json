@@ -1,7 +1,7 @@
 {
     "Internal": {
         "ChargePointId": "earl-o877",
-        "CentralSystemURI": "ocpp.sargsrank.com/ws/",
+        "CentralSystemURI": "steve.sargsrank.com/ws/",
         "ChargeBoxSerialNumber": "earl-o877",
         "ChargePointModel": "Yeti",
         "ChargePointVendor": "Pionix",

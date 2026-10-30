@@ -1,8 +1,8 @@
 {
     "Internal": {
-        "ChargePointId": "parking-charger-001",
+        "ChargePointId": "parking-charger-002",
         "CentralSystemURI": "steve.sargsrank.com/ws/",
-        "ChargeBoxSerialNumber": "parking-charger-001",
+        "ChargeBoxSerialNumber": "parking-charger-002",
         "ChargePointModel": "Yeti",
         "ChargePointVendor": "Pionix",
         "FirmwareVersion": "0.1",

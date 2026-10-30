@@ -42,9 +42,13 @@ case "${1:-help}" in
         # Foreground with a TTY so Ctrl+C stops the manager and all its modules.
         case "${2:-powerfill}" in
             powerfill) docker exec -it "$(container)" bash -lc "cd /workspace && ./build/run-scripts/$DEFAULT_RUN" ;;
-            sargsrank|parking)
+            sargsrank|parking|localhost)
                 # Same scenario as run-sil-ocpp.sh, with the OCPP charge-point config swapped.
-                cp_json=$([ "$2" = parking ] && echo ocpp-parking-charger-001.json || echo ocpp-relay.json)
+                case $2 in
+                    sargsrank) cp_json=ocpp-relay.json ;;
+                    parking)   cp_json=ocpp-parking-charger-001.json ;;
+                    localhost) cp_json=ocpp-localhost.json ;;
+                esac
                 docker exec -it "$(container)" bash -lc "
                     sed 's|/workspace/config/ocpp-powerfill.json|/workspace/config/$cp_json|' \
                         /workspace/config/config-sil-ocpp.yaml > /tmp/config-sil-ocpp-relay.yaml
@@ -66,7 +70,7 @@ case "${1:-help}" in
         cat <<EOF
 Usage: $0 <command> [arg]
   start [flow]     start containers, load Node-RED flow (default: $DEFAULT_FLOW), open UI
-  run [target]     run in the foreground: powerfill (default) | sargsrank | parking | a build/run-scripts/ script
+  run [target]     run in the foreground: powerfill (default) | sargsrank | parking | localhost | a build/run-scripts/ script
   flow [flow]      (re)load a Node-RED flow
   kill             stop a running manager
   shell            shell inside the devcontainer
